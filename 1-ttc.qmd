@@ -178,40 +178,35 @@ final evaluation is truly unbiased.
 ::: {.callout-tip collapse="false" icon=false}
 ## `<i class="bi bi-book"></i>`{=html} Exercice 2: Split the dataset into train / validation / test sets
 
-## Question 1 — Write a split function
+## Question 1 — Split the dataset
 
-Write a function `train_val_test_split` that shuffles the DataFrame and returns three
-non-overlapping splits according to provided fractions.
+Use `train_test_split` from `sklearn.model_selection` to split the dataset into train, validation, and test sets (70% / 15% / 15%). Do not forget to choose a `random_state`.
 
-*Use `df.sample(fraction=1.0, shuffle=True, seed=seed)` to shuffle, then slice with integer indices.*
+<details>
+<summary>Clue here</summary>
+`train_test_split` splits a dataset in two — call it twice to get three subsets.
+</details>
+
 ```{python}
 #| label: split-fn
 #| code-fold: true
 #| code-summary: Click to see the answer
 #| code-overflow: scroll
-def train_val_test_split(
-    df: pl.DataFrame,
-    train_frac: float = 0.7,
-    val_frac: float = 0.15,
-    seed: int = 42,
-) -> tuple[pl.DataFrame, pl.DataFrame, pl.DataFrame]:
-    df = df.sample(fraction=1.0, shuffle=True, seed=seed)
-    n = len(df)
-    n_train = int(n * train_frac)
-    n_val = int(n * val_frac)
-    train = df[:n_train]
-    val   = df[n_train : n_train + n_val]
-    test  = df[n_train + n_val :]
-    return train, val, test
+from sklearn.model_selection import train_test_split
+
+train_df, tmp_df = train_test_split(df, test_size=0.30, random_state=42)
+val_df, test_df  = train_test_split(tmp_df, test_size=0.50, random_state=42)
+
+X_train = train_df["label"].to_numpy()
+X_val   = val_df["label"].to_numpy()
+X_test  = test_df["label"].to_numpy()
+
+print(f"Train: {len(train_df)} | Val: {len(val_df)} | Test: {len(test_df)}")
 ```
 
-## Question 2 — Apply the split and encode labels
+## Question 2 — Encode the target labels
 
-Apply the function and extract the `label` (features) and `code` (target) columns for each
-split as numpy arrays. Encode the string codes to integers with `LabelEncoder` — keep the
-fitted encoder to decode predictions back to NAF codes later.
-
-*Use `LabelEncoder` from `sklearn.preprocessing`. Call `.fit()` on all codes, then `.transform()` on each split. Extract numpy arrays with `.to_numpy()`.*
+The `code` column contains strings like `"47.11A"`. Neural networks require integer targets, so we need to map each unique NAF code to an integer index. Encode the `code` column of each split using `LabelEncoder` from `sklearn.preprocessing`, and keep the fitted encoder — you will need it later to convert integer predictions back to NAF code strings.
 
 ::: {.callout-warning collapse="true"}
 ## Watch out for data leakage
@@ -228,15 +223,12 @@ If a code appears only in the validation or test set and the encoder has never s
 #| output: true
 from sklearn.preprocessing import LabelEncoder
 
-train, val, test = train_val_test_split(df)
-
-# Fit on all codes so val/test codes are not unknown to the encoder
 encoder = LabelEncoder()
 encoder.fit(df['code'].to_numpy())
 
-X_train, y_train = train['label'].to_numpy(), encoder.transform(train['code'].to_numpy())
-X_val,   y_val   = val['label'].to_numpy(),   encoder.transform(val['code'].to_numpy())
-X_test,  y_test  = test['label'].to_numpy(),  encoder.transform(test['code'].to_numpy())
+y_train = encoder.transform(train_df['code'].to_numpy())
+y_val   = encoder.transform(val_df['code'].to_numpy())
+y_test  = encoder.transform(test_df['code'].to_numpy())
 
 print(f"Train: {len(train)} | Val: {len(val)} | Test: {len(test)}")
 print(f"Example: '{train['label'][0]}' → {encoder.inverse_transform(y_train[:1])[0]}")
@@ -512,10 +504,7 @@ words drove the prediction.
 
 ::: {.callout-important}
 ## On the interpretation of attention attributions
-Attention weights highlight which tokens the model focused on when predicting a class — but
-attention is **not** a faithful explanation of model decisions in all cases. High attention on
-a word means the model used it as a signal, not necessarily that it is the true cause of the
-prediction. Use these visualisations as an exploratory tool, not as a ground-truth explanation.
+Attention weights highlight which tokens the model focused on when predicting a class — but attention is **not** a faithful explanation of model decisions in all cases. High attention on a word means the model used it as a signal, not necessarily that it is the true cause of the prediction. Use these visualisations as an exploratory tool, not as a ground-truth explanation.
 :::
 
 ::: {.callout-tip collapse="false" icon=false}
