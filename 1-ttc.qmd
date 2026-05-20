@@ -29,6 +29,8 @@ In this notebook, we use the supervised approach: the model learns directly from
 
 ## Pipeline overview
 
+The diagram below shows the five steps of our pipeline. We start from a **labelled dataset** — text descriptions paired with their correct NAF code. We then **split** it into three subsets (train, validation, test) so we can train without peeking at the data we use to evaluate. Before feeding text to the model, a **tokenizer** converts each description into a sequence of numbers, because neural networks only understand numbers. The **classifier** then learns, from thousands of examples, which number sequences correspond to which NAF codes. Finally, we **evaluate** how accurate the model is on unseen examples and inspect which words drove each prediction.
+
 ```mermaid
 flowchart LR
     A["Labelled data<br/>text + NAF code"] --> B["Split<br/>train / val / test"]
@@ -55,7 +57,7 @@ Make sure your environment is ready:
   MLFLOW_TRACKING_URI=<add the MLflow server URL>
   MLFLOW_RUN_ID=<add the run ID>
   ```
-- **torchtextclassifiers**: this notebook relies on the [`torchtextclassifiers`](https://github.com/InseeFrLab/torchTextClassifiers) library developped by INSEE. Refer to its GitHub for full API documentation.
+- **torchtextclassifiers**: this notebook relies on the [`torchtextclassifiers`](https://github.com/InseeFrLab/torchTextClassifiers) library developped by Insee. The full API documentation is available [here](https://inseefrlab.github.io/torchTextClassifiers/).
 
 ---
 
