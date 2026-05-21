@@ -96,7 +96,9 @@ Go to the [SSPCloud catalogue](https://datalab.sspcloud.fr/catalog) and launch a
 Open a terminal in the VS Code service and clone **your fork** (replace `<YOUR_GITHUB_NAME>` with your GitHub username):
 
 ```bash
-git clone https://github.com/<YOUR_GITHUB_NAME>/funathon-project2.git
+git clone https://<YOUR_GITHUB_TOKEN>@github.com/<YOUR_GITHUB_NAME>/funathon-project2.git
+git config --global user.email "<YOUR_EMAIL>"
+git config --global user.name "<YOUR_GITHUB_NAME>"
 cd funathon-project2
 ```
 
