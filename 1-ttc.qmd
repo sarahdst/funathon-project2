@@ -317,7 +317,10 @@ Because the vocabulary is learned from your data, it naturally adapts to domain-
 Train a `WordPieceTokenizer` from scratch on the training labels with `vocab_size=5000`
 and `output_dim=10`. Inspect a sample tokenization to understand how the text is split.
 
-*Instantiate `WordPieceTokenizer(vocab_size=5000, output_dim=10)` and call `.train(X_train)`. Use `.tokenize()` and `.convert_ids_to_tokens()` to inspect a sample.*
+<details>
+<summary>Clue here</summary>
+Instantiate `WordPieceTokenizer(vocab_size=5000, output_dim=10)` and call `.train(X_train)`. Use `.tokenize()` and `.convert_ids_to_tokens()` to inspect a sample.
+</details>
 
 ::: {.callout-warning collapse="true"}
 ## Tokenizer data leakage
@@ -386,7 +389,10 @@ components, and training loop.
 
 Instantiate the classifier from a `ModelConfig` and the trained tokenizer.
 
-*Build a  `ModelConfig` with `embedding_dim` and `num_classes`. Pass both to `torchTextClassifiers(tokenizer=..., model_config=..., value_encoder=...)`.*
+<details>
+<summary>Clue here</summary>
+Build a  `ModelConfig` with `embedding_dim` and `num_classes`. Pass both to `torchTextClassifiers(tokenizer=..., model_config=..., value_encoder=...)`.
+</details>
 
 ::: {.callout-note appearance="simple" collapse="true"}
 ## Key parameter
@@ -417,7 +423,10 @@ ttc = torchTextClassifiers(
 
 Define a `TrainingConfig` and train on a small subsample so it completes quickly.
 
-*Create a `TrainingConfig(lr=..., batch_size=..., num_epochs=...)` and call `ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_config=..., verbose=True)`.*
+<details>
+<summary>Clue here</summary>
+Create a `TrainingConfig(lr=..., batch_size=..., num_epochs=...)` and call `ttc.train(X_train=..., y_train=..., X_val=..., y_val=..., training_config=..., verbose=True)`.
+</details>
 
 You can see the `TrainingConfig` documentation [here](https://inseefrlab.github.io/torchTextClassifiers/api/configs.html#trainingconfig)
 
@@ -485,12 +494,12 @@ with mlflow.start_run() as run:
     )
 ```
 
-
-**Loading the model back from MLflow:**
+::: {.callout-tip appearance="simple" collapse="true"}
+## Tip - Loading the model back from MLflow
 
 `torchTextClassifiers.load()` reads `model_checkpoint.ckpt`, `tokenizer.pkl`, `value_encoder.pkl`, and the metadata file that were saved by `ttc.save()` — the same files that `ttc.train()` produced.
 
-```{python}
+```python
 #| label: load-from-run
 #| code-overflow: scroll
 #| output: true
@@ -503,6 +512,7 @@ ttc_loaded = torchTextClassifiers.load(local_dir)
 
 print(ttc_loaded)
 ```
+
 :::
 
 ## Question 3 — Load the pretrained model from MLflow
@@ -526,6 +536,7 @@ ttc.pytorch_model.eval()
 
 ```
 
+:::
 
 # Prediction and explainability
 
