@@ -284,7 +284,7 @@ value_encoder = ValueEncoder(label_encoder=encoder)
 
 ## Why tokenization?
 
-Neural networks can only work with numbers because they have no notion of letters or words. A **tokenizer** is the component that bridges this gap: it converts raw text into a sequence of integers that the model can process.
+Neural networks can only work with numbers because they have no notion of letters or words. As a a consequence, models cannot use directly the string "I sell croissants and pains au chocolat" to predict a NACE code, it must be transformed into something the model can use. A **tokenizer** is the component that bridges this gap: it converts raw text into a sequence of integers that the model can process.
 
 The process has three steps:
 
@@ -327,16 +327,19 @@ Because the vocabulary is learned from your data, it naturally adapts to domain-
 
 ## Question 1 — Train the tokenizer and inspect a sample
 
-Train a `WordPieceTokenizer` from scratch on the training labels with `vocab_size=5000`
-and `output_dim=10`. Inspect a sample tokenization to understand how the text is split.
+You are going to use a `WordPieceTokenizer` from the `torchTextClassifiers` package (see the [documentation](https://inseefrlab.github.io/torchTextClassifiers/api/tokenizers.html)). Train a `WordPieceTokenizer` from scratch on the training labels with `vocab_size=5000`
+and `output_dim=10`. Use the fitted tokenizer to tokenize one observations (with the `tokenize` method), and inspect the result to understand how the text is split.
 
-*Instantiate `WordPieceTokenizer(vocab_size=5000, output_dim=10)` and call `.train(X_train)`. Use `.tokenize()` and `.convert_ids_to_tokens()` to inspect a sample.*
+<details>
+<summary>Clue here</summary>
+Instantiate `WordPieceTokenizer(vocab_size=5000, output_dim=10)` and call `.train(X_train)`. Use `.tokenize()` and `.convert_ids_to_tokens()` to inspect a sample.
+</details>
 
 ::: {.callout-warning collapse="true"}
 ## Tokenizer data leakage
-Always train the tokenizer on `X_train` only — never on the validation or test set.
+Always train the tokenizer on `X_train` only — never on the validation or test sets.
 Using the full dataset would mean the tokenizer has seen vocabulary from examples the model
-is supposed to predict blind.
+is supposed to predict.
 :::
 
 ```{python}
