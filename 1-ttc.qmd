@@ -357,10 +357,12 @@ A text classification model in `torchTextClassifiers` is built from three compon
    A self-attention layer can be added to capture word order and context.
 
 2. [**CategoricalVariableNet**](https://inseefrlab.github.io/torchTextClassifiers/architecture/overview.html#component-3-categorical-variable-handler) *(optional)*: encodes additional categorical features and merges
-   them with the text representation. Not used in this dataset.
+   them with the text representation. **Not used in this dataset.**
 
 3. [**ClassificationHead**](https://inseefrlab.github.io/torchTextClassifiers/architecture/overview.html#component-4-classification-head): projects the final representation onto `num_classes` dimensions.
    The highest value determines the predicted class.
+
+![torchTextClassifier architecture overview](img/ttc_architecture.png)
 
 These are configured through `ModelConfig` and assembled automatically by `torchTextClassifiers`. You can see some `ModelConfig` examples [here](https://inseefrlab.github.io/torchTextClassifiers/architecture/overview.html#usage-examples) and for `torchTextClassifiers` [here](https://inseefrlab.github.io/torchTextClassifiers/api/wrapper.html)
 
