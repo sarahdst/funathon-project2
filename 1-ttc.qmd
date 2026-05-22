@@ -69,21 +69,24 @@ In this notebook, we use MLflow in two ways:
 - During training (Exercise 4), metrics are logged to a remote MLflow server so you can monitor progress.
 - After training (Exercise 4, Question 3), we **download a pretrained model** that was already trained on the full dataset and stored in MLflow, so you do not have to wait hours for training to complete.
 
-**2. Set up your MLflow credentials**
+**3. Start an MLflow service**
+
+Launch an MLflow service from the SSP Cloud service catalogue. To do so, go on SSPCloud, click on `My Services`, then on `New Service`, then on `Automation`, then on `MLflow`, then on `Launch`. Once the service starts, its public URL appears in the service details. It typically looks like `https://user-<username>-mlflow.user.lab.sspcloud.fr`.
+
+
+**4. Set up your MLflow credentials**
 
 [MLflow](https://mlflow.org/) is an open-source platform for tracking machine learning experiments. Every time a model is trained, MLflow records the hyperparameters used, the metrics obtained (loss, accuracy…), and the model artefacts (weights, tokenizer, configuration). This makes it easy to compare runs, reproduce results, and share trained models with others. This funathon project uses MLflow in multiple ways.
 
 Because the MLflow server is a remote, access-controlled service, you need to provide three pieces of information:
 
-- `MLFLOW_TRACKING_URI`: the URL of the MLflow server (ex: ``https://projet-funathon-mlflow.user.lab.sspcloud.fr/``).
-- `MLFLOW_TRACKING_USERNAME`
-- `MLFLOW_TRACKING_PASSWORD`
+- `MLFLOW_TRACKING_URI`: the URL of the MLflow server (ex: `https://user-<username>-mlflow.user.lab.sspcloud.fr`).
+- `MLFLOW_TRACKING_USERNAME`;
+- `MLFLOW_TRACKING_PASSWORD`.
 
-**They are given on the information panel that opens when you launch your MLflow service.**
+**They are given on the information panel that opens when you launch your MLflow service.** 
 
-These values must **not** be hardcoded in the notebook — storing credentials in source code is a security risk.
-
-**Instead, create a file named `.env` at the root of the project and fill it in as follows:**
+These values must **not** be hardcoded in the notebook — storing credentials in source code is a security risk (anyone with these credentials could access your MLflow). **Instead, create a file named `.env` at the root of the project and fill it in as follows:**
 
 ```
 MLFLOW_TRACKING_URI=<add the MLflow server URL>
@@ -91,7 +94,7 @@ MLFLOW_TRACKING_USERNAME=<add your username>
 MLFLOW_TRACKING_PASSWORD=<add your password>
 ```
 
-The notebook loads this file automatically at startup with `load_dotenv()`, making the values available as environment variables without ever appearing in the code. Be careful: do not add spaces around the `=` sign, and do not put single quotes or double quotes. Example: `MLFLOW_TRACKING_USERNAME=DonaldDuck`.
+The notebook loads this file automatically at startup with `load_dotenv()`, making the values available as environment variables without ever appearing in the code. Be careful: do not add spaces around the `=` sign, and do not put single quotes or double quotes. Example: `MLFLOW_TRACKING_USERNAME=user-donaldduck`.
 
 ---
 
